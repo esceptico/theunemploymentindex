@@ -49,8 +49,6 @@
   }
 
   function rollAttribution(rng, allowReal) {
-    // Target distribution when real allowed: 30/50/20.
-    // When not allowed, redistribute across parody + role: ~70/30.
     if (allowReal) {
       const r = rng();
       if (r < 0.30) return pick(rng, DATA.attributions.real);
@@ -102,14 +100,17 @@
   /* ---------------------------- Rendering --------------------------- */
 
   const q = (sel) => document.querySelector(sel);
+
   const els = {
-    pct:  q('.pct'),
-    job:  q('.job'),
-    time: q('.time'),
-    attr: q('.attr'),
-    regen: q('.regen'),
-    share: q('.share'),
-    toast: q('.toast')
+    quote:       q('.quote'),
+    attribution: q('.attribution'),
+    pct:         q('.pct'),
+    job:         q('.job'),
+    time:        q('.time'),
+    attr:        q('.attr'),
+    regen:       q('.regen'),
+    share:       q('.share'),
+    toast:       q('.toast')
   };
 
   function paint(roll) {
@@ -122,38 +123,57 @@
 
   /* --------------------------- Regenerate --------------------------- */
 
+  const EASE = 'cubic-bezier(0.2, 0.7, 0.2, 1)';
   let regenerating = false;
 
-  function regenerate() {
+  async function regenerate() {
     if (regenerating) return;
     regenerating = true;
 
-    const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const dimMs = prefersReduced ? 0 : 160;
-
-    document.body.classList.add('thinking');
-
-    setTimeout(() => {
+    const swap = () => {
       const seed = newSeed();
       writeSeed(seed);
-      const roll = generate(mulberry32(seed));
+      paint(generate(mulberry32(seed)));
+    };
 
-      // The dim state is captured as the "old" view-transition snapshot,
-      // and the class-removal + paint happen inside the callback so the
-      // "new" snapshot is the fresh, undimmed quote.
-      const update = () => {
-        paint(roll);
-        document.body.classList.remove('thinking');
-      };
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      swap();
+      regenerating = false;
+      return;
+    }
 
-      if (document.startViewTransition) {
-        const vt = document.startViewTransition(update);
-        vt.finished.finally(() => { regenerating = false; });
-      } else {
-        update();
-        regenerating = false;
-      }
-    }, dimMs);
+    const targets = [els.quote, els.attribution];
+
+    // Fade out — quote and attribution together, quick.
+    const outAnims = targets.map(el => el.animate(
+      [
+        { opacity: 1, transform: 'translateY(0)' },
+        { opacity: 0, transform: 'translateY(-6px)' }
+      ],
+      { duration: 220, easing: EASE, fill: 'forwards' }
+    ));
+
+    await Promise.all(outAnims.map(a => a.finished));
+
+    // Swap content while invisible.
+    swap();
+
+    // Fade in — rises from below. fill:'both' + tiny delay holds the
+    // start frame (opacity 0, y+8) before the animation visibly begins,
+    // so there is no flash between the outgoing and incoming states.
+    const inAnims = targets.map(el => el.animate(
+      [
+        { opacity: 0, transform: 'translateY(8px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ],
+      { duration: 380, delay: 16, easing: EASE, fill: 'both' }
+    ));
+
+    await Promise.all(inAnims.map(a => a.finished));
+
+    // Release fill:forwards so natural styles (opacity 1, translate 0) apply.
+    [...outAnims, ...inAnims].forEach(a => a.cancel());
+    regenerating = false;
   }
 
   /* ------------------------------ Share ----------------------------- */
@@ -164,7 +184,6 @@
     try {
       await navigator.clipboard.writeText(location.href);
     } catch {
-      // Fallback: select the URL visually? For now, just bail silently.
       return;
     }
     els.toast.hidden = false;
@@ -178,8 +197,7 @@
     const existing = urlSeed();
     const seed = existing !== null ? existing : newSeed();
     if (existing === null) writeSeed(seed);
-    const roll = generate(mulberry32(seed));
-    paint(roll);
+    paint(generate(mulberry32(seed)));
 
     document.body.classList.add('load');
 
@@ -189,8 +207,8 @@
     window.addEventListener('keydown', (e) => {
       const tag = (e.target && e.target.tagName) || '';
       if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.target === els.share) return;
       if (e.code === 'Space' || e.key === ' ' || e.key === 'Enter') {
-        if (e.target === els.share) return; // let share handle its own click
         e.preventDefault();
         regenerate();
       }
