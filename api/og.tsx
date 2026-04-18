@@ -3,8 +3,8 @@ import { mulberry32, generate, seedFromParam, newSeed } from '../doom.js';
 
 export const config = { runtime: 'edge' };
 
-const INTER_BOLD   = 'https://rsms.me/inter/font-files/Inter-Bold.woff';
-const INTER_ITALIC = 'https://rsms.me/inter/font-files/Inter-Italic.woff';
+const INTER_BOLD   = 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-700-normal.woff';
+const INTER_ITALIC = 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-400-italic.woff';
 
 const BG     = '#fbfbfc';
 const FG     = '#0b0b0c';
