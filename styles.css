@@ -42,9 +42,20 @@ main {
   align-items: center;
   justify-content: center;
   padding: 6vh 6vw;
-  gap: 1.75rem;
+  gap: 1rem;
   text-align: center;
 }
+
+/* Fixed vertical slots so the regen button stays anchored regardless
+ * of quote/attribution line count. */
+.slot {
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+
+.slot--quote { min-height: clamp(7rem, 22vh, 15rem); }
+.slot--attr  { min-height: 2.8em; margin-bottom: 0.75rem; }
 
 .quote {
   margin: 0;
@@ -63,6 +74,8 @@ main {
   font-style: italic;
   color: var(--muted);
   letter-spacing: 0.01em;
+  max-width: 40ch;
+  text-wrap: balance;
   will-change: opacity, transform;
 }
 
