@@ -48,33 +48,18 @@
     return { text: pick(rng, DATA.times.literals), literal: true };
   }
 
-  function rollAttribution(rng, allowReal) {
-    if (allowReal) {
-      const r = rng();
-      if (r < 0.30) return pick(rng, DATA.attributions.real);
-      if (r < 0.80) return pick(rng, DATA.attributions.parody);
-      return              pick(rng, DATA.attributions.role);
-    }
-    return chance(rng, 0.70)
+  function rollAttribution(rng) {
+    return chance(rng, 0.72)
       ? pick(rng, DATA.attributions.parody)
       : pick(rng, DATA.attributions.role);
   }
 
   function generate(rng) {
-    const pct  = rollPercentage(rng);
-    const job  = rollJob(rng);
-    const time = rollTime(rng);
-
-    // SAFETY RULE — no real names on absurd combos.
-    const mustBeSafe = pct.unhinged || job.tier === 'absurd' || time.literal;
-    const attribution = rollAttribution(rng, !mustBeSafe);
-
     return {
-      pct:  pct.text,
-      job:  job.text,
-      time: time.text,
-      attribution,
-      hue: Math.floor(rng() * 360)
+      pct:         rollPercentage(rng).text,
+      job:         rollJob(rng).text,
+      time:        rollTime(rng).text,
+      attribution: rollAttribution(rng)
     };
   }
 
@@ -118,7 +103,6 @@
     els.job.textContent  = roll.job;
     els.time.textContent = roll.time;
     els.attr.textContent = roll.attribution;
-    document.documentElement.style.setProperty('--hue', String(roll.hue));
   }
 
   /* --------------------------- Regenerate --------------------------- */

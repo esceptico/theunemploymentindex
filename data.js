@@ -1,6 +1,5 @@
 /* Content pools for the AI Unemployment Index.
- * All quotes are fictional parody. Safety rule in main.js gates real
- * names away from absurd rolls. Parody names are wordplay on public
+ * All quotes are fictional. Parody names are wordplay on public
  * figures' professional personas — no slurs, no body stuff, no
  * offensive puns. */
 
@@ -170,13 +169,6 @@ const DATA = {
   },
 
   attributions: {
-    // Real, public AI-industry figures. Only used for tame rolls.
-    real: [
-      'Dario Amodei', 'Sam Altman', 'Demis Hassabis', 'Sundar Pichai',
-      'Mustafa Suleyman', 'Jensen Huang', 'Andrew Ng',
-      'Andrej Karpathy', 'Jeff Dean'
-    ],
-
     // Obvious parody names. Wordplay only on their public personas / work.
     parody: [
       'Dario Amodoom',
