@@ -168,6 +168,15 @@ footer {
 
 .toast:not([hidden]) { opacity: 1; }
 
+/* Hidden by default — the body.load animation below reveals them once
+ * JS has finished painting the first random quote, so there's no flash
+ * of the placeholder HTML between parse and script-run. */
+.quote,
+.attribution,
+.regen {
+  opacity: 0;
+}
+
 /* Initial load — gentle stagger */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(10px); }
