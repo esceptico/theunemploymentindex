@@ -1,13 +1,24 @@
 /* Content pools for the AI Unemployment Index.
- * All quotes are fictional parody. See safety rule in main.js. */
+ * All quotes are fictional parody. Safety rule in main.js gates real
+ * names away from absurd rolls. Parody names are wordplay on public
+ * figures' professional personas — no slurs, no body stuff, no
+ * offensive puns. */
 
 const DATA = {
   percentages: {
     // Rendered as "N% of" before the job. Tame — real-name attribution allowed.
-    ugly: [12, 17, 23, 29, 37, 42, 51, 58, 63, 69, 73, 81, 88, 94, 99],
+    ugly: [
+      12, 17, 23, 29, 37, 42, 44, 51, 58, 63,
+      66, 69, 73, 77, 81, 85, 88, 91, 94, 97, 99
+    ],
 
     // Numeric-style but obviously unhinged. Triggers safety rule.
-    unhingedNumeric: ['420%', '1000%', '√(-1)%', 'NaN%', '-17%', 'ℵ₀%', '7/4%', '0.0001%'],
+    unhingedNumeric: [
+      '420%', '1000%', '9999%', '√(-1)%', 'NaN%', '-17%',
+      'ℵ₀%', '7/4%', '0.0001%', 'i/π%', '3i%', '∞%',
+      'a p < 0.05 fraction of', '2 standard deviations of',
+      'Graham\u2019s number of'
+    ],
 
     // Qualifier phrases that go straight before the plural job noun.
     // Triggers safety rule.
@@ -16,12 +27,20 @@ const DATA = {
       'most',
       'many',
       'literally all',
+      'basically all',
       'all but one of',
+      'all the non-tenured',
       'the top 2% of',
+      'the bottom 90% of',
       'approximately some of',
       'the overwhelming majority of',
       'a statistically unusual share of',
-      'every remaining'
+      'every remaining',
+      'the silent majority of',
+      'a non-trivial number of',
+      'a load-bearing fraction of',
+      'some unknowable fraction of',
+      'asymptotically all'
     ]
   },
 
@@ -31,7 +50,10 @@ const DATA = {
       'software engineers', 'paralegals', 'radiologists', 'copywriters',
       'translators', 'bookkeepers', 'data analysts', 'customer support reps',
       'graphic designers', 'financial advisors', 'junior consultants',
-      'technical writers', 'UX researchers', 'tax preparers'
+      'technical writers', 'UX researchers', 'tax preparers',
+      'middle managers', 'compliance officers', 'internal communications leads',
+      'procurement specialists', 'entry-level analysts', 'executive assistants',
+      'marketing associates', 'recruiters', 'account executives'
     ],
 
     // Weird but real — still OK for real-name attribution.
@@ -40,13 +62,15 @@ const DATA = {
       'dog walkers', 'wedding officiants', 'professional mourners',
       'ice sculptors', 'yoga instructors', 'tattoo artists', 'magicians',
       'street performers', 'calligraphers', 'pet psychics', 'hand models',
-      'trainspotters', 'crossword constructors'
+      'trainspotters', 'crossword constructors', 'cheese graders',
+      'professional whistleblowers', 'forensic accountants',
+      'museum night-guards', 'Formula 1 tire engineers'
     ],
 
-    // Absurd — triggers safety rule.
+    // Absurd — triggers safety rule. Heavy X-culture flavor.
     absurd: [
-      'popes', 'competitive hot dog eaters', 'LinkedIn thought leaders',
-      'beekeepers who are also bees', 'royal swan counters',
+      'popes', 'competitive hot dog eaters',
+      'LinkedIn thought leaders', 'royal swan counters',
       'night-shift lighthouse keepers', 'wedding DJs on cruise ships',
       'sommeliers for dogs', 'professional ghost witnesses',
       'exorcists for smart fridges', 'mall Santas in July',
@@ -57,22 +81,56 @@ const DATA = {
       'competitive whistlers', 'deepfake detectives',
       'cloud architects (literally, in the sky)', 'moon real-estate agents',
       'artisanal pixel polishers', 'freelance oracles',
-      'people who still use the word "synergy"', 'goth baristas',
+      'people who still use the word \u201Csynergy\u201D',
       'competitive nappers', 'vibe archaeologists',
       'LinkedIn poets', 'professional fifth wheels',
       'sentient traffic cones', 'artisanal air-quote providers',
       'emergency meme responders', 'PhDs in vibes',
-      'licensed bridge trolls', 'people who correct "whom"',
+      'licensed bridge trolls', 'people who correct \u201Cwhom\u201D',
       'stand-up philosophers', 'professional bystanders',
-      'certified aura readers (corporate)', 'enterprise feng shui consultants',
+      'certified aura readers (corporate tier)',
+      'enterprise feng shui consultants',
       'Roomba whisperers', 'sudoku influencers',
-      'ghostwriters for actual ghosts', 'part-time cryptids'
+      'ghostwriters for actual ghosts', 'part-time cryptids',
+
+      // X / tech-twitter flavor
+      'thread guys who start with \u201Cok so\u201D',
+      'reply guys with a podcast', 'founders still in stealth since 2019',
+      'cofounders #4', 'chiefs of staff to the chief of staff',
+      'Y Combinator dropouts', 'Series A tourists',
+      'angel investors with three followers',
+      'technical cofounders who don\u2019t code',
+      'designers who ship one thing a year',
+      'growth hackers on Adderall', 'vibecoders',
+      'Cursor speedrunners', 'Replit vibe coaches',
+      'token astrologers', 'TPOT oracles',
+      'e/acc posters with anime avatars',
+      'decel doomers who post through it',
+      'AI safety researchers on sabbatical',
+      'prompt whisperers', 'RAG consultants',
+      'LLM benchmark dunkers', 'evals influencers',
+      'substack doomers', 'demo-day pitch poets',
+      'founding engineers who can\u2019t git rebase',
+      'diamond-checkmark X accounts',
+      'head of AI at a non-AI company',
+      'Vercel deployment monks', 'Slack bot shepherds',
+      '10x engineers who are actually 0.1x',
+      'solo devs with 47 abandoned side projects',
+      'people who post \u201Cbreaking:\u201D before non-news',
+      'people who say \u201Cbuilt this in 30 min with Cursor\u201D',
+      'ex-OpenAI engineers \u201Cbuilding something\u201D',
+      'newsletter-having ex-Googlers',
+      'VCs who call themselves \u201Coperators\u201D',
+      'founders on their third pivot this quarter'
     ]
   },
 
   times: {
-    // Numeric unit mode. Paired with an integer 1..N. "in the next N unit(s)".
-    units: ['second', 'minute', 'hour', 'day', 'week', 'month', 'year', 'decade', 'quarter', 'fortnight'],
+    // Numeric unit mode. Paired with integer 1..99. "in the next N unit(s)".
+    units: [
+      'second', 'minute', 'hour', 'day', 'week', 'month',
+      'year', 'decade', 'quarter', 'fortnight', 'sprint'
+    ],
 
     // Joke literals. Triggers safety rule. Rendered as-is after the job.
     literals: [
@@ -82,10 +140,32 @@ const DATA = {
       'in a fortnight of Mondays', 'in 0.7 solar cycles',
       'by the time your coffee cools', 'before the next vibe shift',
       'by the next mercury retrograde', 'in exactly 1 (one) Tuesday',
-      'by god-knows-when', 'faster than you can say prompt engineering',
-      'in the time it takes to write this tweet', 'by the end of this blink',
-      'by the next OpenAI dev day', 'in under one ChatGPT outage',
-      'by the time the next foundation model drops'
+      'by god-knows-when', 'faster than you can say \u201Cprompt engineering\u201D',
+      'in the time it takes to post a thread',
+      'by the end of this blink',
+
+      // X / tech-twitter flavor
+      'by the next OpenAI board coup',
+      'before Dario posts another essay',
+      'by the next Ilya hoodie sighting',
+      'in post-AGI time',
+      'by the time GPT-6 ships (so, never)',
+      'before Altman tweets again',
+      'by the next Anthropic funding round',
+      'in less than one Cursor update',
+      'before the next foundation model drops',
+      'by the next launch week',
+      'by the next X thread on \u201Ctimelines\u201D',
+      'in one-tenth of a Claude context window',
+      'by the time your H100 order ships',
+      'by the next time Yann posts',
+      'in under one ChatGPT outage',
+      'by the next \u201Cwe updated our model\u201D email',
+      'in the time between two Altman interviews',
+      'by next demo day',
+      'in roughly 1 (one) hype cycle',
+      'before the next board drama',
+      'by Q3, which we pushed from Q2'
     ]
   },
 
@@ -93,15 +173,38 @@ const DATA = {
     // Real, public AI-industry figures. Only used for tame rolls.
     real: [
       'Dario Amodei', 'Sam Altman', 'Demis Hassabis', 'Sundar Pichai',
-      'Mustafa Suleyman', 'Jensen Huang'
+      'Mustafa Suleyman', 'Jensen Huang', 'Andrew Ng',
+      'Andrej Karpathy', 'Jeff Dean'
     ],
 
-    // Obvious parody names. Safe for any roll.
+    // Obvious parody names. Wordplay only on their public personas / work.
     parody: [
-      'Dario Amodoom', 'Sham Altperson', 'Elon Tusk', 'Sundar Pipedream',
-      'Demis Hasnobrain', 'Yann LeCunt', 'Geoffrey Hintlol', 'Mira Muratiless',
-      'Ilya Sutseeker', 'Jensen Wang', 'Mark Zuckerbot', 'Satya Nah-della',
-      'Andrew Ngope', 'Sam Bankman-Doomed'
+      'Dario Amodoom',
+      'Sham Altperson',
+      'Elon Tusk',
+      'Sundar Pipedream',
+      'Geoffrey Hintlol',
+      'Mira Muratiless',
+      'Ilya Sutseeker',
+      'Mark Zuckerbot',
+      'Satya Nah-della',
+      'Andrew Ngope',
+      'Sam Bankman-Doomed',
+      'Demis Hashtag',
+      'Yann LeCope',
+      'Jensen Leatherman',
+      'Andrej Karparty',
+      'Ian Goodfake',
+      'Oriol Vinyard',
+      'Paul Grayham',
+      'Marc Andreoutofideas',
+      'Reid Hoffmask',
+      'Peter Theorist',
+      'Balaji Srinicast',
+      'Naval Ravitweet',
+      'David Sixpack',
+      'Mustafa Soothsayer',
+      'Jeff Dean-of-Students'
     ],
 
     // Role-only. Safe for any roll. Bulletproof.
@@ -109,7 +212,7 @@ const DATA = {
       'An anonymous AI lab CEO',
       'A tech billionaire on X',
       'An unnamed Anthropic cofounder',
-      'A senior engineer who "just knows"',
+      'A senior engineer who \u201Cjust knows\u201D',
       'A VC at an undisclosed fund',
       'A whistleblower from an unnamed lab',
       'An AI researcher, speaking off the record',
@@ -117,8 +220,28 @@ const DATA = {
       'A founder still on the hero\u2019s journey',
       'An OpenAI alum (one of several)',
       'A staff+ engineer with strong opinions',
-      'A cofounder who has since left to "build something"',
-      'A pseudonymous X account with 147k followers'
+      'A cofounder who has since left to \u201Cbuild something\u201D',
+      'A pseudonymous X account with 147k followers',
+
+      // X-culture flavor
+      'A reply guy with 12 followers and strong takes',
+      'A thread guy who starts with \u201Cok so\u201D',
+      'An e/acc poster with an anime avatar',
+      'A decel doomer running on Adderall',
+      'A Y Combinator partner after three espressos',
+      'A podcaster who pivoted from crypto to AI',
+      'A Chief of Staff to the Chief of Staff',
+      'A founder pivoting for the third time this quarter',
+      'A TPOT oracle',
+      'A diamond-checkmark X account',
+      'A postdoc who left to start an AI company',
+      'A former Googler with a Substack',
+      'A principal engineer who hasn\u2019t shipped since 2021',
+      'A VC associate pretending to be a partner',
+      'An AI ethics person on sabbatical',
+      'A growth hacker with 6-figure followers and 0 revenue',
+      'A founding engineer at a 3-person AI startup',
+      'A solo dev with a viral tweet and no product'
     ]
   }
 };

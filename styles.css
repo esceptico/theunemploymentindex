@@ -1,17 +1,17 @@
 :root {
   --hue: 0;
-  --bg: hsl(var(--hue) 10% 99%);
+  --bg: hsl(var(--hue) 12% 99%);
   --fg: #0b0b0c;
-  --muted: #8a8a8e;
+  --muted: #8c8c91;
   --border: #dcdcdf;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: hsl(var(--hue) 10% 7%);
-    --fg: #f2f2f3;
-    --muted: #7a7a7e;
-    --border: #2a2a2d;
+    --bg: hsl(var(--hue) 10% 6%);
+    --fg: #f3f3f5;
+    --muted: #7c7c80;
+    --border: #262629;
   }
 }
 
@@ -23,10 +23,12 @@ html, body {
   height: 100%;
   background: var(--bg);
   color: var(--fg);
-  font-family: ui-sans-serif, system-ui, -apple-system, "Inter", "Helvetica Neue", Arial, sans-serif;
-  font-feature-settings: "ss01", "cv11";
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: "ss01", "cv11", "kern";
   -webkit-font-smoothing: antialiased;
-  transition: background 900ms ease;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background 1200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
@@ -42,23 +44,23 @@ main {
   align-items: center;
   justify-content: center;
   padding: 6vh 6vw;
-  gap: 2.5rem;
+  gap: 1.75rem;
   text-align: center;
 }
 
 .quote {
   margin: 0;
-  font-weight: 800;
-  font-size: clamp(2rem, 6.5vw, 5.5rem);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  max-width: 22ch;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 4vw, 3.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  max-width: 30ch;
   text-wrap: balance;
 }
 
 .attribution {
   margin: 0;
-  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
   font-style: italic;
   color: var(--muted);
   letter-spacing: 0.01em;
@@ -66,19 +68,28 @@ main {
 
 .regen {
   font: inherit;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
   background: transparent;
   color: var(--fg);
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 0.7rem 1.4rem;
+  padding: 0.55rem 1.2rem;
   cursor: pointer;
-  transition: transform 150ms ease, border-color 200ms ease, background 200ms ease;
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 300ms ease,
+    background 300ms ease,
+    color 300ms ease;
 }
 
-.regen:hover { border-color: var(--fg); }
-.regen:active { transform: scale(0.96); }
+.regen:hover {
+  border-color: var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.regen:active { transform: scale(0.94); }
 .regen:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
 
 footer {
@@ -87,9 +98,9 @@ footer {
   justify-content: center;
   gap: 0.5rem;
   padding: 1.5rem;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--muted);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
 }
 
 .share {
@@ -100,58 +111,67 @@ footer {
   border: 0;
   padding: 0;
   cursor: pointer;
+  transition: color 200ms ease;
 }
 
 .share:hover { color: var(--fg); }
 
 .toast {
-  margin-left: 0.5rem;
+  margin-left: 0.35rem;
   color: var(--fg);
   opacity: 0;
-  transition: opacity 200ms ease;
+  transition: opacity 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .toast:not([hidden]) { opacity: 1; }
 
-/* View transitions — named per variable span for independent cross-fades */
+/* Per-span view-transition identities */
 .pct  { view-transition-name: pct;  }
 .job  { view-transition-name: job;  }
 .time { view-transition-name: time; }
 .attr { view-transition-name: attr; }
 
-::view-transition-old(pct),
-::view-transition-new(pct),
-::view-transition-old(job),
-::view-transition-new(job),
-::view-transition-old(time),
-::view-transition-new(time),
-::view-transition-old(attr),
-::view-transition-new(attr) {
-  animation-duration: 420ms;
-  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+/* Smooth slide + fade instead of raw crossfade */
+@keyframes vtOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-5px); }
 }
-
-::view-transition-old(job),  ::view-transition-new(job)  { animation-delay: 60ms; }
-::view-transition-old(time), ::view-transition-new(time) { animation-delay: 120ms; }
-::view-transition-old(attr), ::view-transition-new(attr) { animation-delay: 180ms; }
-
-/* Initial load stagger */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
+@keyframes vtIn {
+  from { opacity: 0; transform: translateY(5px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-body.load .pct  { animation: fadeUp 500ms 0ms both cubic-bezier(0.2, 0.7, 0.2, 1); }
-body.load .job  { animation: fadeUp 500ms 80ms both cubic-bezier(0.2, 0.7, 0.2, 1); }
-body.load .time { animation: fadeUp 500ms 160ms both cubic-bezier(0.2, 0.7, 0.2, 1); }
-body.load .attr { animation: fadeUp 500ms 240ms both cubic-bezier(0.2, 0.7, 0.2, 1); }
+::view-transition-old(pct)  { animation: vtOut 280ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+::view-transition-new(pct)  { animation: vtIn  340ms 40ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
 
-/* "Computing" flicker before regenerate */
+::view-transition-old(job)  { animation: vtOut 280ms 40ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+::view-transition-new(job)  { animation: vtIn  340ms 80ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+
+::view-transition-old(time) { animation: vtOut 280ms 80ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+::view-transition-new(time) { animation: vtIn  340ms 120ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+
+::view-transition-old(attr) { animation: vtOut 280ms 120ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+::view-transition-new(attr) { animation: vtIn  340ms 160ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+
+/* Initial load stagger */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+body.load .pct  { animation: fadeUp 480ms 0ms   both cubic-bezier(0.2, 0.7, 0.2, 1); }
+body.load .job  { animation: fadeUp 480ms 60ms  both cubic-bezier(0.2, 0.7, 0.2, 1); }
+body.load .time { animation: fadeUp 480ms 120ms both cubic-bezier(0.2, 0.7, 0.2, 1); }
+body.load .attr { animation: fadeUp 480ms 180ms both cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+/* Pre-roll dim — subtle, no harsh blur */
 body.thinking .quote,
 body.thinking .attribution {
-  filter: blur(4px);
-  opacity: 0.55;
-  transition: filter 150ms ease, opacity 150ms ease;
+  opacity: 0.4;
+  transform: translateY(1px);
+  transition:
+    opacity 180ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 180ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -160,5 +180,5 @@ body.thinking .attribution {
     transition-duration: 0.01ms !important;
   }
   body.thinking .quote,
-  body.thinking .attribution { filter: none; opacity: 1; }
+  body.thinking .attribution { opacity: 1; transform: none; }
 }

@@ -120,14 +120,6 @@
     document.documentElement.style.setProperty('--hue', String(roll.hue));
   }
 
-  function render(roll) {
-    if (document.startViewTransition) {
-      document.startViewTransition(() => paint(roll));
-    } else {
-      paint(roll);
-    }
-  }
-
   /* --------------------------- Regenerate --------------------------- */
 
   let regenerating = false;
@@ -137,18 +129,31 @@
     regenerating = true;
 
     const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const flickerMs = prefersReduced ? 0 : 180;
+    const dimMs = prefersReduced ? 0 : 160;
 
     document.body.classList.add('thinking');
 
     setTimeout(() => {
-      document.body.classList.remove('thinking');
       const seed = newSeed();
       writeSeed(seed);
       const roll = generate(mulberry32(seed));
-      render(roll);
-      regenerating = false;
-    }, flickerMs);
+
+      // The dim state is captured as the "old" view-transition snapshot,
+      // and the class-removal + paint happen inside the callback so the
+      // "new" snapshot is the fresh, undimmed quote.
+      const update = () => {
+        paint(roll);
+        document.body.classList.remove('thinking');
+      };
+
+      if (document.startViewTransition) {
+        const vt = document.startViewTransition(update);
+        vt.finished.finally(() => { regenerating = false; });
+      } else {
+        update();
+        regenerating = false;
+      }
+    }, dimMs);
   }
 
   /* ------------------------------ Share ----------------------------- */
