@@ -151,6 +151,14 @@ footer {
 
 .share:hover { color: var(--fg); }
 
+.credit {
+  color: inherit;
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.credit:hover { color: var(--fg); }
+
 .toast {
   margin-left: 0.35rem;
   color: var(--fg);

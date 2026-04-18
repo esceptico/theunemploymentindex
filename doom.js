@@ -1,26 +1,18 @@
-/* Content pools for the AI Unemployment Index.
- * All quotes are fictional. Parody names are wordplay on public
- * figures' professional personas — no slurs, no body stuff, no
- * offensive puns. */
+/* Shared ES module: content pools, seeded RNG, and quote generator.
+ * Imported by both the browser (main.js) and the edge function (api/og.tsx). */
 
-const DATA = {
+export const DATA = {
   percentages: {
-    // Rendered as "N% of" before the job. Tame — real-name attribution allowed.
     ugly: [
       12, 17, 23, 29, 37, 42, 44, 51, 58, 63,
       66, 69, 73, 77, 81, 85, 88, 91, 94, 97, 99
     ],
-
-    // Numeric-style but obviously unhinged. Triggers safety rule.
     unhingedNumeric: [
-      '420%', '1000%', '9999%', '√(-1)%', 'NaN%', '-17%',
-      'ℵ₀%', '7/4%', '0.0001%', 'i/π%', '3i%', '∞%',
+      '420%', '1000%', '9999%', '\u221A(-1)%', 'NaN%', '-17%',
+      '\u2135\u2080%', '7/4%', '0.0001%', 'i/\u03C0%', '3i%', '\u221E%',
       'a p < 0.05 fraction of', '2 standard deviations of',
       'Graham\u2019s number of'
     ],
-
-    // Qualifier phrases that go straight before the plural job noun.
-    // Triggers safety rule.
     qualifier: [
       'all',
       'most',
@@ -44,7 +36,6 @@ const DATA = {
   },
 
   jobs: {
-    // Tame: plausible real jobs. Real-name attribution allowed.
     plausible: [
       'software engineers', 'paralegals', 'radiologists', 'copywriters',
       'translators', 'bookkeepers', 'data analysts', 'customer support reps',
@@ -54,8 +45,6 @@ const DATA = {
       'procurement specialists', 'entry-level analysts', 'executive assistants',
       'marketing associates', 'recruiters', 'account executives'
     ],
-
-    // Weird but real — still OK for real-name attribution.
     weird: [
       'baristas', 'mimes', 'sommeliers', 'tarot readers', 'puppeteers',
       'dog walkers', 'wedding officiants', 'professional mourners',
@@ -65,8 +54,6 @@ const DATA = {
       'professional whistleblowers', 'forensic accountants',
       'museum night-guards', 'Formula 1 tire engineers'
     ],
-
-    // Absurd — triggers safety rule. Heavy X-culture flavor.
     absurd: [
       'popes', 'competitive hot dog eaters',
       'LinkedIn thought leaders', 'royal swan counters',
@@ -91,8 +78,6 @@ const DATA = {
       'enterprise feng shui consultants',
       'Roomba whisperers', 'sudoku influencers',
       'ghostwriters for actual ghosts', 'part-time cryptids',
-
-      // X / tech-twitter flavor
       'thread guys who start with \u201Cok so\u201D',
       'reply guys with a podcast', 'founders still in stealth since 2019',
       'cofounders #4', 'chiefs of staff to the chief of staff',
@@ -125,13 +110,10 @@ const DATA = {
   },
 
   times: {
-    // Numeric unit mode. Paired with integer 1..99. "in the next N unit(s)".
     units: [
       'second', 'minute', 'hour', 'day', 'week', 'month',
       'year', 'decade', 'quarter', 'fortnight', 'sprint'
     ],
-
-    // Joke literals. Triggers safety rule. Rendered as-is after the job.
     literals: [
       'by Tuesday', 'by lunch', 'retroactively, last Thursday',
       'in 3 business goats', 'before you finish reading this',
@@ -142,8 +124,6 @@ const DATA = {
       'by god-knows-when', 'faster than you can say \u201Cprompt engineering\u201D',
       'in the time it takes to post a thread',
       'by the end of this blink',
-
-      // X / tech-twitter flavor
       'by the next OpenAI board coup',
       'before Dario posts another essay',
       'by the next Ilya hoodie sighting',
@@ -169,37 +149,17 @@ const DATA = {
   },
 
   attributions: {
-    // Obvious parody names. Wordplay only on their public personas / work.
     parody: [
-      'Dario Amodoom',
-      'Sham Altperson',
-      'Elon Tusk',
-      'Sundar Pipedream',
-      'Geoffrey Hintlol',
-      'Mira Muratiless',
-      'Ilya Sutseeker',
-      'Mark Zuckerbot',
-      'Satya Nah-della',
-      'Andrew Ngope',
-      'Sam Bankman-Doomed',
-      'Demis Hashtag',
-      'Yann LeCope',
-      'Jensen Leatherman',
-      'Andrej Karparty',
-      'Ian Goodfake',
-      'Oriol Vinyard',
-      'Paul Grayham',
-      'Marc Andreoutofideas',
-      'Reid Hoffmask',
-      'Peter Theorist',
-      'Balaji Srinicast',
-      'Naval Ravitweet',
-      'David Sixpack',
-      'Mustafa Soothsayer',
+      'Dario Amodoom', 'Sham Altperson', 'Elon Tusk', 'Sundar Pipedream',
+      'Geoffrey Hintlol', 'Mira Muratiless', 'Ilya Sutseeker',
+      'Mark Zuckerbot', 'Satya Nah-della', 'Andrew Ngope',
+      'Sam Bankman-Doomed', 'Demis Hashtag', 'Yann LeCope',
+      'Jensen Leatherman', 'Andrej Karparty', 'Ian Goodfake',
+      'Oriol Vinyard', 'Paul Grayham', 'Marc Andreoutofideas',
+      'Reid Hoffmask', 'Peter Theorist', 'Balaji Srinicast',
+      'Naval Ravitweet', 'David Sixpack', 'Mustafa Soothsayer',
       'Jeff Dean-of-Students'
     ],
-
-    // Role-only. Safe for any roll. Bulletproof.
     role: [
       'An anonymous AI lab CEO',
       'A tech billionaire on X',
@@ -214,8 +174,6 @@ const DATA = {
       'A staff+ engineer with strong opinions',
       'A cofounder who has since left to \u201Cbuild something\u201D',
       'A pseudonymous X account with 147k followers',
-
-      // X-culture flavor
       'A reply guy with 12 followers and strong takes',
       'A thread guy who starts with \u201Cok so\u201D',
       'An e/acc poster with an anime avatar',
@@ -237,3 +195,67 @@ const DATA = {
     ]
   }
 };
+
+export function mulberry32(seed) {
+  return function () {
+    seed |= 0;
+    seed = (seed + 0x6D2B79F5) | 0;
+    let t = seed;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return (((t ^ (t >>> 14)) >>> 0) / 4294967296);
+  };
+}
+
+const randInt = (rng, n) => Math.floor(rng() * n);
+const pick = (rng, arr) => arr[randInt(rng, arr.length)];
+const chance = (rng, p) => rng() < p;
+
+function rollPercentage(rng) {
+  const r = rng();
+  if (r < 0.50) return `${pick(rng, DATA.percentages.ugly)}% of`;
+  if (r < 0.75) return `${pick(rng, DATA.percentages.unhingedNumeric)} of`;
+  return pick(rng, DATA.percentages.qualifier);
+}
+
+function rollJob(rng) {
+  const r = rng();
+  if (r < 0.15) return pick(rng, DATA.jobs.plausible);
+  if (r < 0.50) return pick(rng, DATA.jobs.weird);
+  return pick(rng, DATA.jobs.absurd);
+}
+
+function rollTime(rng) {
+  if (chance(rng, 0.4)) {
+    const unit = pick(rng, DATA.times.units);
+    const n = 1 + randInt(rng, 99);
+    const plural = n === 1 ? unit : unit + 's';
+    return `in the next ${n} ${plural}`;
+  }
+  return pick(rng, DATA.times.literals);
+}
+
+function rollAttribution(rng) {
+  return chance(rng, 0.72)
+    ? pick(rng, DATA.attributions.parody)
+    : pick(rng, DATA.attributions.role);
+}
+
+export function generate(rng) {
+  return {
+    pct:         rollPercentage(rng),
+    job:         rollJob(rng),
+    time:        rollTime(rng),
+    attribution: rollAttribution(rng)
+  };
+}
+
+export function seedFromParam(v) {
+  if (v == null) return null;
+  const n = parseInt(v, 36);
+  return Number.isFinite(n) ? n : null;
+}
+
+export function newSeed() {
+  return Math.floor(Math.random() * 0x7FFFFFFF);
+}

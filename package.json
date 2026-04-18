@@ -1,0 +1,13 @@
+{
+  "name": "unemployment-index",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@vercel/og": "^0.6.3",
+    "@vercel/edge": "^1.1.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0"
+  }
+}
