@@ -1,0 +1,164 @@
+:root {
+  --hue: 0;
+  --bg: hsl(var(--hue) 10% 99%);
+  --fg: #0b0b0c;
+  --muted: #8a8a8e;
+  --border: #dcdcdf;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: hsl(var(--hue) 10% 7%);
+    --fg: #f2f2f3;
+    --muted: #7a7a7e;
+    --border: #2a2a2d;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  transition: background 900ms ease;
+}
+
+body {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6vh 6vw;
+  gap: 2.5rem;
+  text-align: center;
+}
+
+.quote {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(2rem, 6.5vw, 5.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+.attribution {
+  margin: 0;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  font-style: italic;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+.regen {
+  font: inherit;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.7rem 1.4rem;
+  cursor: pointer;
+  transition: transform 150ms ease, border-color 200ms ease, background 200ms ease;
+}
+
+.regen:hover { border-color: var(--fg); }
+.regen:active { transform: scale(0.96); }
+.regen:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
+
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+.share {
+  font: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.share:hover { color: var(--fg); }
+
+.toast {
+  margin-left: 0.5rem;
+  color: var(--fg);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.toast:not([hidden]) { opacity: 1; }
+
+/* View transitions — named per variable span for independent cross-fades */
+.pct  { view-transition-name: pct;  }
+.job  { view-transition-name: job;  }
+.time { view-transition-name: time; }
+.attr { view-transition-name: attr; }
+
+::view-transition-old(pct),
+::view-transition-new(pct),
+::view-transition-old(job),
+::view-transition-new(job),
+::view-transition-old(time),
+::view-transition-new(time),
+::view-transition-old(attr),
+::view-transition-new(attr) {
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+::view-transition-old(job),  ::view-transition-new(job)  { animation-delay: 60ms; }
+::view-transition-old(time), ::view-transition-new(time) { animation-delay: 120ms; }
+::view-transition-old(attr), ::view-transition-new(attr) { animation-delay: 180ms; }
+
+/* Initial load stagger */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+body.load .pct  { animation: fadeUp 500ms 0ms both cubic-bezier(0.2, 0.7, 0.2, 1); }
+body.load .job  { animation: fadeUp 500ms 80ms both cubic-bezier(0.2, 0.7, 0.2, 1); }
+body.load .time { animation: fadeUp 500ms 160ms both cubic-bezier(0.2, 0.7, 0.2, 1); }
+body.load .attr { animation: fadeUp 500ms 240ms both cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+/* "Computing" flicker before regenerate */
+body.thinking .quote,
+body.thinking .attribution {
+  filter: blur(4px);
+  opacity: 0.55;
+  transition: filter 150ms ease, opacity 150ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  body.thinking .quote,
+  body.thinking .attribution { filter: none; opacity: 1; }
+}
