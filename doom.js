@@ -8,10 +8,9 @@ export const DATA = {
       66, 69, 73, 77, 81, 85, 88, 91, 94, 97, 99
     ],
     unhingedNumeric: [
-      '420%', '1000%', '9999%', '\u221A(-1)%', 'NaN%', '-17%',
-      '\u2135\u2080%', '7/4%', '0.0001%', 'i/\u03C0%', '3i%', '\u221E%',
+      '420%', '1000%', '9999%',
+      '\u2135\u2080%', '7/4%', '0.0001%',
       'a p < 0.05 fraction of', '2 standard deviations of',
-      'Graham\u2019s number of'
     ],
     qualifier: [
       'all',
